@@ -1,0 +1,17 @@
+{
+  "smtp_server": "localhost",
+  "smtp_port": 1025,
+  "sender_email": "security@company.com",
+  "templates_dir": "templates",
+  "campaigns_dir": "campaigns",
+  "tracking": {
+    "enabled": true,
+    "tracking_server": "localhost",
+    "tracking_port": 8080
+  },
+  "logging": {
+    "enabled": true,
+    "log_file": "simulator.log",
+    "log_level": "INFO"
+  }
+} 

@@ -1,0 +1,50 @@
+body {
+  width: 300px;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 15px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+h1 {
+  font-size: 18px;
+  margin: 0;
+  color: #333;
+}
+
+.status-indicator {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.safe {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.danger {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+#settings {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+} 

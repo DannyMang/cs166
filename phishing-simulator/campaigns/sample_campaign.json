@@ -1,0 +1,33 @@
+{
+  "name": "Password Reset Campaign",
+  "description": "Educational demonstration of a password reset phishing attempt",
+  "template": "password_reset",
+  "subject": "Urgent: Security Alert - Action Required",
+  "sender_name": "IT Security Team",
+  "recipients": [
+    {
+      "email": "test1@example.com",
+      "name": "John Doe",
+      "department": "Marketing"
+    },
+    {
+      "email": "test2@example.com",
+      "name": "Jane Smith",
+      "department": "Engineering"
+    },
+    {
+      "email": "test3@example.com",
+      "name": "Robert Johnson",
+      "department": "Finance"
+    }
+  ],
+  "tracking": {
+    "enabled": true,
+    "click_tracking": true,
+    "open_tracking": true
+  },
+  "schedule": {
+    "start_date": "2025-04-25T09:00:00",
+    "end_date": "2025-04-25T17:00:00"
+  }
+} 

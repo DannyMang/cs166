@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Verification Required</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+    <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px;">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="https://via.placeholder.com/150x50?text=BankLogo" alt="Bank Logo" style="max-width: 150px;">
+        </div>
+        
+        <h2 style="color: #0275d8;">Account Verification Required</h2>
+        
+        <p>Dear {{name}},</p>
+        
+        <p>As part of our ongoing security measures, we require all customers to verify their account information periodically.</p>
+        
+        <p>Our records indicate that your account verification is now due. Please complete this process within the next 48 hours to avoid any interruption to your banking services.</p>
+        
+        <p style="background-color: #f8f9fa; padding: 10px; border-left: 4px solid #0275d8;">
+            <strong>Account ID:</strong> ****{{random_id}}<br>
+            <strong>Verification Due:</strong> {{current_time}}<br>
+        </p>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="http://secure-banking-portal.com/verify?id={{random_id}}&email={{email}}" style="background-color: #0275d8; color: white; padding: 12px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">Verify Account Now</a>
+        </div>
+        
+        <p>This verification process will only take a few minutes to complete and helps us ensure the security of your account.</p>
+        
+        <p>Thank you for your cooperation,<br>
+        Customer Security Department</p>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #777;">
+            <p>This is an automated message. Please do not reply to this email.</p>
+            <p>© 2025 Secure Bank. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html> 
