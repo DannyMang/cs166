@@ -19,6 +19,9 @@ class PhishingSimulator:
         self.sender_email = os.getenv('SENDER_EMAIL')
         self.sender_password = os.getenv('SENDER_PASSWORD')
 
+        # Local server configuration
+        self.local_server = "http://localhost:5001"
+
     def load_template(self, template_name):
         """Load an HTML email template"""
         return self.env.get_template(f'{template_name}.html')
@@ -26,6 +29,12 @@ class PhishingSimulator:
     def send_phishing_email(self, recipient_email, template_name, template_data):
         """Send a phishing simulation email"""
         try:
+            # Add local server URL to template data
+            if template_name == 'password_reset':
+                template_data['reset_link'] = f"{self.local_server}/fake-reset"
+            elif template_name == 'account_verification':
+                template_data['verification_link'] = f"{self.local_server}/fake-verify"
+
             # Create message
             msg = MIMEMultipart('alternative')
             msg['Subject'] = template_data.get('subject', 'Important Account Update')
@@ -60,7 +69,6 @@ def main():
             'data': {
                 'subject': 'Urgent: Password Reset Required',
                 'company_name': 'Your Bank',
-                'reset_link': 'https://fake-bank-reset.com',
                 'expiry_hours': 24
             }
         },
@@ -69,7 +77,6 @@ def main():
             'data': {
                 'subject': 'Verify Your Account',
                 'company_name': 'Online Store',
-                'verification_link': 'https://fake-store-verify.com',
                 'account_id': 'ACC123456'
             }
         }
