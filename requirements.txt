@@ -6,6 +6,7 @@ scikit-learn>=1.0.0
 
 # Web and API
 flask>=2.0.0
+flask-cors>=3.0.0
 requests>=2.27.0
 beautifulsoup4>=4.10.0
 urllib3>=1.26.0

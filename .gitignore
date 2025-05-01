@@ -1,2 +1,59 @@
-venv
-__pycache__
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.env
+*.egg-info/
+dist/
+build/
+eggs/
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ML Model files and data
+*.h5
+*.pkl
+*.model
+*.weights
+# Exception for our trained model files
+!ml-model/data/url_model.h5
+!ml-model/data/tokenizer.pkl
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Node (for browser extension)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Logs and databases
+*.log
+*.sqlite
+*.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Distribution / packaging
+dist/
+build/
+*.zip

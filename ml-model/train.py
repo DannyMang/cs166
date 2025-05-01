@@ -62,63 +62,36 @@ def main():
     print("Loading data...")
     data = load_data('data/phishing_urls.csv', 'data/legitimate_urls.csv')
     
-    # Extract features
-    print("Extracting features...")
-    features = []
-    for url in data['url']:
-        features.append(extract_url_features(url))
+    # Create model instance
+    model = PhishingDetectionModel()
     
-    features_df = pd.DataFrame(features)
+    # Prepare tokenizer
+    print("Preparing tokenizer...")
+    model.prepare_tokenizer(data['url'])
+    
+    # Extract features and preprocess URLs
+    print("Processing URLs...")
+    X = model.preprocess_text(data['url'])
+    y = data['label'].values
     
     # Split data
-    X = features_df
-    y = data['label']
-    
     X_train, X_temp, y_train, y_temp = train_test_split(X, y, test_size=0.3, random_state=42)
     X_val, X_test, y_val, y_test = train_test_split(X_temp, y_temp, test_size=0.5, random_state=42)
     
-    # Create and train model
+    # Train model
     print("Training model...")
-    model = PhishingDetectionModel()
+    model.train(X_train, y_train, X_val, y_val, epochs=20, batch_size=32)
     
-    # Convert features to numpy arrays
-    X_train_np = X_train.to_numpy()
-    X_val_np = X_val.to_numpy()
-    X_test_np = X_test.to_numpy()
-    
-    # Build a simple model for URL features
-    from tensorflow.keras import layers, models
-    
-    url_model = models.Sequential([
-        layers.Dense(64, activation='relu', input_shape=(X_train_np.shape[1],)),
-        layers.Dropout(0.5),
-        layers.Dense(32, activation='relu'),
-        layers.Dropout(0.3),
-        layers.Dense(1, activation='sigmoid')
-    ])
-    
-    url_model.compile(
-        optimizer='adam',
-        loss='binary_crossentropy',
-        metrics=['accuracy']
-    )
-    
-    # Train the model
-    history = url_model.fit(
-        X_train_np, y_train,
-        validation_data=(X_val_np, y_val),
-        epochs=20,
-        batch_size=32
-    )
-    
-    # Evaluate the model
+    # Evaluate model
     print("Evaluating model...")
-    loss, accuracy = url_model.evaluate(X_test_np, y_test)
+    loss, accuracy, precision, recall = model.evaluate(X_test, y_test)
     print(f"Test accuracy: {accuracy:.4f}")
+    print(f"Test precision: {precision:.4f}")
+    print(f"Test recall: {recall:.4f}")
     
-    # Save the model
-    print("Saving model...")
-    url_model.save('data/url_model.h5')
+    # Save model and tokenizer
+    print("Saving model and tokenizer...")
+    model.save('data/url_model.h5', 'data/tokenizer.pkl')
     
     print("Done!")
 

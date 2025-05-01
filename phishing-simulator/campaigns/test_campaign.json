@@ -1,0 +1,11 @@
+{
+    "template": "test",
+    "subject": "Security Test",
+    "sender_name": "Security Team",
+    "recipients": [
+        {
+            "email": "test@example.com",
+            "name": "Test User"
+        }
+    ]
+} 

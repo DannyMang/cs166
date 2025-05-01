@@ -1,12 +1,12 @@
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "showWarning") {
-    showPhishingWarning(message.url);
+    showPhishingWarning(message.url, message.confidence, message.features);
   }
 });
 
 // Function to display a warning banner
-function showPhishingWarning(url) {
+function showPhishingWarning(url, confidence, features) {
   // Create warning element
   const warningBanner = document.createElement('div');
   warningBanner.style.position = 'fixed';
@@ -22,10 +22,30 @@ function showPhishingWarning(url) {
   warningBanner.style.fontSize = '16px';
   warningBanner.style.boxShadow = '0 2px 5px rgba(0,0,0,0.2)';
   
+  // Format confidence as percentage
+  const confidencePercent = Math.round(confidence * 100);
+  
+  // Create features list if available
+  let featuresHtml = '';
+  if (features) {
+    featuresHtml = `
+      <div style="margin: 10px 0; font-size: 14px; text-align: left; max-width: 600px; margin: 10px auto;">
+        <strong>Suspicious features detected:</strong>
+        <ul style="margin: 5px 0;">
+          ${features.has_https ? '' : '<li>Not using HTTPS</li>'}
+          ${features.is_ip ? '<li>Using IP address instead of domain name</li>' : ''}
+          ${features.subdomain_count > 2 ? '<li>Excessive number of subdomains</li>' : ''}
+          ${features.num_digits > 5 ? '<li>Unusual number of digits in URL</li>' : ''}
+        </ul>
+      </div>
+    `;
+  }
+  
   // Add warning text
   warningBanner.innerHTML = `
     <strong>⚠️ Phishing Warning!</strong> 
-    <p>This website may be attempting to steal your personal information.</p>
+    <p>This website has been detected as a potential phishing attempt (${confidencePercent}% confidence).</p>
+    ${featuresHtml}
     <button id="proceed-anyway" style="margin-right: 10px; padding: 5px 10px;">Proceed Anyway</button>
     <button id="go-back" style="padding: 5px 10px;">Go Back</button>
   `;
@@ -43,7 +63,7 @@ function showPhishingWarning(url) {
   });
 }
 
-// Analyze page content for phishing indicators
+// Analyze page content for additional phishing indicators
 function analyzePage() {
   // Get all text content from the page
   const pageText = document.body.innerText.toLowerCase();
@@ -78,7 +98,12 @@ function analyzePage() {
   
   // If score is high enough, show warning
   if (suspiciousScore >= 2) {
-    showPhishingWarning(window.location.href);
+    showPhishingWarning(window.location.href, 0.75, {
+      has_https: window.location.protocol === 'https:',
+      is_ip: false,
+      subdomain_count: window.location.hostname.split('.').length - 1,
+      num_digits: (window.location.href.match(/\d/g) || []).length
+    });
   }
 }
 
