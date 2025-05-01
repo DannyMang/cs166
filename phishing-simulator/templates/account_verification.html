@@ -2,41 +2,79 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Verification Required</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .content {
+            padding: 20px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .account-info {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .footer {
+            font-size: 12px;
+            color: #6c757d;
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
 </head>
-<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
-    <div style="border: 1px solid #ddd; border-radius: 5px; padding: 20px;">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <img src="https://via.placeholder.com/150x50?text=BankLogo" alt="Bank Logo" style="max-width: 150px;">
+<body>
+    <div class="header">
+        <h2>{{ company_name }} Account Verification</h2>
+    </div>
+    
+    <div class="content">
+        <p>Dear Customer,</p>
+        
+        <p>Thank you for creating an account with {{ company_name }}. To ensure the security of your account and complete the registration process, please verify your email address.</p>
+        
+        <div class="account-info">
+            <p><strong>Account ID:</strong> {{ account_id }}</p>
+            <p><strong>Status:</strong> Pending Verification</p>
         </div>
         
-        <h2 style="color: #0275d8;">Account Verification Required</h2>
+        <p>Please click the button below to verify your account:</p>
         
-        <p>Dear {{name}},</p>
-        
-        <p>As part of our ongoing security measures, we require all customers to verify their account information periodically.</p>
-        
-        <p>Our records indicate that your account verification is now due. Please complete this process within the next 48 hours to avoid any interruption to your banking services.</p>
-        
-        <p style="background-color: #f8f9fa; padding: 10px; border-left: 4px solid #0275d8;">
-            <strong>Account ID:</strong> ****{{random_id}}<br>
-            <strong>Verification Due:</strong> {{current_time}}<br>
+        <p style="text-align: center;">
+            <a href="{{ verification_link }}" class="button">Verify Your Account</a>
         </p>
         
-        <div style="text-align: center; margin: 30px 0;">
-            <a href="http://secure-banking-portal.com/verify?id={{random_id}}&email={{email}}" style="background-color: #0275d8; color: white; padding: 12px 20px; text-decoration: none; border-radius: 4px; font-weight: bold;">Verify Account Now</a>
-        </div>
+        <p>If you did not create an account with {{ company_name }}, please ignore this email or contact our support team.</p>
         
-        <p>This verification process will only take a few minutes to complete and helps us ensure the security of your account.</p>
-        
-        <p>Thank you for your cooperation,<br>
-        Customer Security Department</p>
-        
-        <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #777;">
-            <p>This is an automated message. Please do not reply to this email.</p>
-            <p>© 2025 Secure Bank. All rights reserved.</p>
-        </div>
+        <p>Best regards,<br>
+        {{ company_name }} Support Team</p>
+    </div>
+    
+    <div class="footer">
+        <p>This is an automated message, please do not reply to this email.</p>
+        <p>© {{ company_name }}. All rights reserved.</p>
     </div>
 </body>
 </html> 
