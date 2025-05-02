@@ -22,35 +22,113 @@ def load_data(phishing_csv, legitimate_csv):
     
     return combined_df
 
+def generate_phishing_urls(n=1000):
+    """Generate synthetic phishing URLs with varying levels of suspiciousness"""
+    legitimate_domains = ['paypal', 'amazon', 'apple', 'microsoft', 'google', 'facebook', 'netflix', 'bank', 'chase', 'wellsfargo']
+    tlds = ['.com', '.net', '.org', '.info', '.online', '.xyz', '.site', '.me', '.co', '.biz']
+    suspicious_words = ['secure', 'login', 'verify', 'account', 'update', 'confirm', 'signin', 'service']
+    
+    urls = []
+    for _ in range(n):
+        domain = np.random.choice(legitimate_domains)
+        tld = np.random.choice(tlds)
+        suspicious = np.random.choice(suspicious_words)
+        
+        # Generate URLs with varying levels of suspiciousness
+        suspiciousness_level = np.random.random()  # 0 to 1
+        
+        if suspiciousness_level > 0.8:  # Highly suspicious (20% of cases)
+            pattern = np.random.choice([
+                f'http://{domain}-{suspicious}-verify{tld}',
+                f'http://secure-{domain}-{suspicious}{tld}',
+                f'http://{domain}-account-verify{tld}',
+                f'http://{suspicious}-{domain}-secure{tld}'
+            ])
+        elif suspiciousness_level > 0.5:  # Moderately suspicious (30% of cases)
+            pattern = np.random.choice([
+                f'http://{domain}.{suspicious}{tld}',
+                f'http://{domain}-{suspicious}{tld}',
+                f'http://{domain}account{tld}',
+                f'http://my-{domain}-{suspicious}{tld}'
+            ])
+        else:  # Slightly suspicious (50% of cases)
+            pattern = np.random.choice([
+                f'http://www.{domain}{tld}/{suspicious}',
+                f'http://{domain}{tld}/account/{suspicious}',
+                f'http://{domain}-online{tld}',
+                f'http://{domain}{tld}/login'
+            ])
+        
+        # Add random numbers sometimes (but less frequently)
+        if np.random.random() < 0.2:  # Reduced from 0.4
+            random_num = np.random.randint(100, 999)
+            pattern = pattern.replace(tld, f'{random_num}{tld}')
+        
+        urls.append(pattern)
+    
+    return urls
+
+def generate_legitimate_urls(n=1000):
+    """Generate legitimate URLs with some borderline cases"""
+    legitimate_urls = [
+        'https://www.paypal.com/signin',
+        'https://www.amazon.com/login',
+        'https://www.apple.com/shop',
+        'https://www.microsoft.com/account',
+        'https://www.google.com/account',
+        'https://www.facebook.com/login',
+        'https://www.netflix.com/browse',
+        'https://www.chase.com/personal/banking',
+        'https://www.wellsfargo.com/online-banking',
+        'https://www.bankofamerica.com'
+    ]
+    
+    # Generate variations of legitimate URLs
+    urls = []
+    for base_url in legitimate_urls:
+        domain = base_url.split('/')[2]
+        base_domain = '.'.join(domain.split('.')[-2:])  # e.g., 'paypal.com'
+        
+        # Standard paths that might look slightly suspicious but are legitimate
+        paths = [
+            '',
+            '/login',
+            '/signin',
+            '/account',
+            '/secure',
+            '/auth',
+            '/verify-account',  # Legitimate but could look suspicious
+            '/password-reset',
+            '/2fa/verify',
+            '/security-check'
+        ]
+        
+        # Add variations
+        for _ in range(n // len(legitimate_urls)):
+            if np.random.random() > 0.7:  # 30% slightly suspicious but legitimate
+                path = np.random.choice(paths)
+                param = np.random.choice(['?auth=1', '?secure=true', '?verify=1', ''])
+                subdomain = np.random.choice(['www', 'secure', 'login', 'auth', 'accounts'])
+                url = f'https://{subdomain}.{base_domain}{path}{param}'
+            else:  # 70% clearly legitimate
+                path = np.random.choice(paths[:5])  # Use only clearly legitimate paths
+                param = np.random.choice(['', '?lang=en', '?region=us', '?src=web'])
+                url = f'https://www.{base_domain}{path}{param}'
+            urls.append(url)
+    
+    return urls[:n]
+
 def main():
     # Create data directory if it doesn't exist
     os.makedirs('data', exist_ok=True)
     
-    # For demonstration, we'll create sample data
-    # In a real project, you would use actual phishing and legitimate URLs
-    print("Creating sample data...")
+    print("Generating training data...")
     
-    # Sample phishing URLs
-    phishing_urls = [
-        'http://paypal-secure.com/login',
-        'http://amazon-account-verify.com',
-        'http://secure-banking-login.com',
-        'http://facebook-verify.com/login',
-        'http://apple-id-confirm.com',
-        # Add more examples...
-    ]
+    # Generate balanced dataset
+    phishing_urls = generate_phishing_urls(2000)  # Reduced from 3000
+    legitimate_urls = generate_legitimate_urls(2000)  # Reduced from 3000
     
-    # Sample legitimate URLs
-    legitimate_urls = [
-        'https://www.paypal.com/login',
-        'https://www.amazon.com',
-        'https://www.bankofamerica.com',
-        'https://www.facebook.com',
-        'https://www.apple.com',
-        # Add more examples...
-    ]
-    
-    # Create sample dataframes
+    # Create dataframes
     phishing_df = pd.DataFrame({'url': phishing_urls})
     legitimate_df = pd.DataFrame({'url': legitimate_urls})
     
@@ -80,17 +158,20 @@ def main():
     
     # Train model
     print("Training model...")
-    model.train(X_train, y_train, X_val, y_val, epochs=20, batch_size=32)
+    history = model.train(X_train, y_train, X_val, y_val, epochs=15, batch_size=32)  # Reduced epochs
     
     # Evaluate model
-    print("Evaluating model...")
-    loss, accuracy, precision, recall = model.evaluate(X_test, y_test)
-    print(f"Test accuracy: {accuracy:.4f}")
-    print(f"Test precision: {precision:.4f}")
-    print(f"Test recall: {recall:.4f}")
+    print("\nEvaluating model...")
+    metrics = model.evaluate(X_test, y_test)
+    print(f"\nTest Results:")
+    print(f"Loss: {metrics[0]:.4f}")
+    print(f"Accuracy: {metrics[1]:.4f}")
+    print(f"Precision: {metrics[2]:.4f}")
+    print(f"Recall: {metrics[3]:.4f}")
+    print(f"AUC: {metrics[4]:.4f}")
     
     # Save model and tokenizer
-    print("Saving model and tokenizer...")
+    print("\nSaving model and tokenizer...")
     model.save('data/url_model.h5', 'data/tokenizer.pkl')
     
     print("Done!")
