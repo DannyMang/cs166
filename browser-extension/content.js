@@ -7,8 +7,15 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 // Function to display a warning banner
 function showPhishingWarning(url, confidence, features) {
+  // Remove any existing warning banner
+  const existingBanner = document.getElementById('phishing-warning-banner');
+  if (existingBanner) {
+    existingBanner.remove();
+  }
+
   // Create warning element
   const warningBanner = document.createElement('div');
+  warningBanner.id = 'phishing-warning-banner';
   warningBanner.style.position = 'fixed';
   warningBanner.style.top = '0';
   warningBanner.style.left = '0';

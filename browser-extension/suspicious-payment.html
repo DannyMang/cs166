@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>⚠️ Payment Information Update Required</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+        }
+        .urgent-notice {
+            background: #ffebee;
+            border: 2px solid #ff5252;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .payment-form {
+            background: #f5f5f5;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background: #ff4444;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="urgent-notice">
+        <h2>🚨 URGENT: Account Payment Update Required!</h2>
+        <p>We have detected unusual activity on your account. Your payment information needs to be verified within 24 hours to prevent account suspension.</p>
+    </div>
+
+    <div class="payment-form">
+        <h3>Verify Payment Information</h3>
+        <p style="color: red;">Time remaining: <span id="countdown">23:59:59</span></p>
+        
+        <form>
+            <label>Card Number</label>
+            <input type="text" placeholder="XXXX-XXXX-XXXX-XXXX" required>
+            
+            <label>Expiration Date</label>
+            <input type="text" placeholder="MM/YY" required>
+            
+            <label>Security Code (CVV)</label>
+            <input type="text" placeholder="123" required>
+            
+            <label>Account Password</label>
+            <input type="password" placeholder="Verify your identity" required>
+            
+            <button type="submit">UPDATE NOW to Prevent Account Suspension</button>
+        </form>
+        
+        <p style="font-size: 12px; color: #666; margin-top: 20px;">
+            ⚠️ Warning: Your account access will be limited if you don't update within the time limit.
+        </p>
+    </div>
+
+    <script>
+        // Add a fake countdown timer
+        setInterval(() => {
+            const timer = document.getElementById('countdown');
+            const time = timer.textContent.split(':');
+            let h = parseInt(time[0]);
+            let m = parseInt(time[1]);
+            let s = parseInt(time[2]);
+            
+            s--;
+            if (s < 0) { s = 59; m--; }
+            if (m < 0) { m = 59; h--; }
+            if (h < 0) { h = 23; }
+            
+            timer.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }, 1000);
+    </script>
+</body>
+</html> 
